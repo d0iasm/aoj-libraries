@@ -1,64 +1,55 @@
-#include <bits/stdc++.h>
+#define INT_MAX 2147483647
+#include<bits/stdc++.h>
 using namespace std;
-
-
-class RangeSumQuery {
-private:
-  int* tree;
-public:
-  int size;
-  RangeSumQuery(int n) {
-    size = 1; while(size < n) size *= 2;
-    tree = new int[2*size - 1];
-    for (int i=0; i < 2*size - 1; i++) tree[i] = 0;
-  }
-  void add(int i, int x);
-  long long int getSum(int s, int t, int i, int l, int r);
-};
-
-void RangeSumQuery::add(int i, int x) {
-  i += size - 1;
-
-  tree[i] = x;
-  while (i > 0) {
-    i = (i - 1) / 2;
-    tree[i] = tree[2*i+1] + tree[2*i+2];
-  }
-
-  cout << "size: " << size << '\n';
-  for(int i=0; i<size*2-1; i++) {
-  cout << i<<":" << tree[i] << ", ";
-  }
-  cout << '\n';
-}
-
-long long int RangeSumQuery::getSum(int s, int t, int i, int l, int r) {
-  cout << i << ": (" << s << ", " << t << ")" << '\n';
-  cout << "[" << l << ", " << r << "]" << '\n';
-  if (r < s || t < l) return 0;
-  if (s <= l && r <= t) return tree[i];
-
-  int vl = getSum(s, t, 2*i+1, l, (l+r)/2);
-  int vr = getSum(s, t, 2*i+2, (l+r)/2+1, r);
-  return vl + vr;
-}
-
-int main() {
-  ios::sync_with_stdio(false);
-  cin.tie(0);  
-  int n, q;
-  int com, x, y;
-  cin >> n >> q;
-
-  RangeSumQuery* rsq = new RangeSumQuery(n);
+ 
+const int MAX_N=10000000;
   
-  for (int i=0; i<q; i++) {
-    cin >> com >> x >> y;
-    if (com == 0) {
-      rsq -> add(x-1, y);
-    } else {
-      cout << rsq -> getSum(x-1, y-1, 0, 0, rsq->size - 1) << '\n';
+int n;
+int dat[MAX_N*2-1];
+  
+void init(){
+    int i=n;
+    n=2;
+ 
+    while (n<i)n*=2;
+     
+    fill(dat,dat+n*2,0);
+}
+  
+void update(int i,int x){
+    i+=n-1;
+    while(i>0){
+        dat[i]+=x;
+        i=(i-1)/2;
     }
-  }
-  return 0;
+    dat[0]+=x;
+}
+ 
+long long int query(int a,int b,int k,int l,int r){
+    if(r<a||b<l)return 0;
+    if(a<=l&&r<=b) return dat[k];
+    else{
+        int vl=query(a,b,k*2+1,l,(l+r)/2);
+        int vr=query(a,b,k*2+2,(l+r)/2+1,r);
+        return vl+vr;
+    }
+}
+ 
+int main(){
+    int q,a,b,c;
+    cin>>n>>q;
+     
+    init();
+     
+    while(q--){
+        cin>>a>>b>>c;
+        if(a)cout<<query(b-1,c-1,0,0,n-1)<<endl;
+        else update(b-1,c);
+         
+        /*for(int i=0;i<n*2;i++){
+            cout<<dat[i]<<" ";
+        }
+        cout<<endl;*/
+    }
+     
 }
