@@ -2,7 +2,6 @@
 using namespace std;
 
 
-
 class RangeSumQuery {
 private:
   int* tree;
@@ -14,7 +13,7 @@ public:
     for (int i=0; i < 2*size - 1; i++) tree[i] = 0;
   }
   void add(int i, int x);
-  int getSum(int s, int t, int i, int l, int r);
+  long long int getSum(int s, int t, int i, int l, int r);
 };
 
 void RangeSumQuery::add(int i, int x) {
@@ -26,16 +25,16 @@ void RangeSumQuery::add(int i, int x) {
     tree[i] = tree[2*i+1] + tree[2*i+2];
   }
 
-  // cout << "size: " << size << '\n';
-  // for(int i=0; i<size*2-1; i++) {
-    // cout << i<<":" << tree[i] << ", ";
-  // }
-  // cout << '\n';
+  cout << "size: " << size << '\n';
+  for(int i=0; i<size*2-1; i++) {
+  cout << i<<":" << tree[i] << ", ";
+  }
+  cout << '\n';
 }
 
-int RangeSumQuery::getSum(int s, int t, int i, int l, int r) {
-  // cout << i << ": (" << s << ", " << t << ")" << '\n';
-  // cout << "[" << l << ", " << r << "]" << '\n';
+long long int RangeSumQuery::getSum(int s, int t, int i, int l, int r) {
+  cout << i << ": (" << s << ", " << t << ")" << '\n';
+  cout << "[" << l << ", " << r << "]" << '\n';
   if (r < s || t < l) return 0;
   if (s <= l && r <= t) return tree[i];
 
@@ -46,8 +45,7 @@ int RangeSumQuery::getSum(int s, int t, int i, int l, int r) {
 
 int main() {
   ios::sync_with_stdio(false);
-  cin.tie(0);
-  
+  cin.tie(0);  
   int n, q;
   int com, x, y;
   cin >> n >> q;
@@ -57,9 +55,9 @@ int main() {
   for (int i=0; i<q; i++) {
     cin >> com >> x >> y;
     if (com == 0) {
-      rsq -> add(x, y);
+      rsq -> add(x-1, y);
     } else {
-      cout << rsq -> getSum(x, y, 0, 0, rsq->size - 1) << '\n';
+      cout << rsq -> getSum(x-1, y-1, 0, 0, rsq->size - 1) << '\n';
     }
   }
   return 0;
