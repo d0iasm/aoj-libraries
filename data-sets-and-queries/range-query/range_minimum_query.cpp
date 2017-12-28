@@ -32,8 +32,8 @@ int RangeMinimumQuery::find(int s, int t, int i, int l, int r) {
   if (r < s || t < l) return INT_MAX;
   if (s <= l && r <= t) return tree[i];
 
-  int vl = RangeMinimumQuery::find(s, t, 2*i+1, l, (l+r)/2);
-  int vr = RangeMinimumQuery::find(s, t, 2*i+2, (l+r)/2+1, r);
+  int vl = find(s, t, 2*i+1, l, (l+r)/2);
+  int vr = find(s, t, 2*i+2, (l+r)/2+1, r);
   return min(vl, vr);
 }
 
@@ -45,11 +45,12 @@ int main () {
   RangeMinimumQuery* RmQ = new RangeMinimumQuery(n);
   
   int com, x, y;
-  for (int i=0; i < q; i++) {    cin >> com >> x >> y;
+  for (int i=0; i < q; i++) {
+    cin >> com >> x >> y;
     if (com == 0) {
       RmQ -> update(x ,y);
     } else {
-      cout << RmQ -> find(x, y, 0, 0, n-1) << '\n';
+      cout << RmQ -> find(x, y, 0, 0, RmQ -> size - 1) << '\n';
     }
   }
   return 0;
