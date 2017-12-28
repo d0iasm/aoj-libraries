@@ -19,22 +19,14 @@ public:
 void RangeSumQuery::add(int i, int x) {
   i += size - 1;
 
-  tree[i] = x;
+  tree[i] += x;
   while (i > 0) {
     i = (i - 1) / 2;
     tree[i] = tree[2*i+1] + tree[2*i+2];
   }
-
-  cout << "size: " << size << '\n';
-  for(int i=0; i<size*2-1; i++) {
-  cout << i<<":" << tree[i] << ", ";
-  }
-  cout << '\n';
 }
 
 long long int RangeSumQuery::getSum(int s, int t, int i, int l, int r) {
-  cout << i << ": (" << s << ", " << t << ")" << '\n';
-  cout << "[" << l << ", " << r << "]" << '\n';
   if (r < s || t < l) return 0;
   if (s <= l && r <= t) return tree[i];
 
@@ -50,14 +42,14 @@ int main() {
   int com, x, y;
   cin >> n >> q;
 
-  RangeSumQuery* rsq = new RangeSumQuery(n);
+  RangeSumQuery rsq(n);
   
   for (int i=0; i<q; i++) {
     cin >> com >> x >> y;
     if (com == 0) {
-      rsq -> add(x-1, y);
+      rsq.add(x-1, y);
     } else {
-      cout << rsq -> getSum(x-1, y-1, 0, 0, rsq->size - 1) << '\n';
+      cout << rsq.getSum(x-1, y-1, 0, 0, rsq.size - 1) << '\n';
     }
   }
   return 0;
