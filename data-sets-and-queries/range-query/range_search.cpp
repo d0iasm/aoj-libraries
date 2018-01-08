@@ -1,12 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int ST_SIZE = (1 << 18) - 1;
 const int MAX_N = 500001;
-const int MAX_Q = 20001;
-const int MAX = 1000000001;
-
-
 int n, q;
 
 struct pt {
@@ -68,19 +63,26 @@ set<int> ans;
 void query(int stx, int enx, int sty, int eny, int dep, node *n) {
   if (!n) return;
 
-  if (pts[n->l].x <= stx && enx <= pts[n->r].x && pts[n->l].y <= sty && eny <= pts[n->r].y) {
-    for (int i = n->l; i <= n->r; i++) {
-      ans.insert(i);
-    }
-    return;
+  int x = pts[n->mid].x;
+  int y = pts[n->mid].y;
+
+  if(stx <=x && x <= stx && sty <= y && y <= sty) {
+    ans.insert(pts[n->mid].id);
   }
 
+  // if (pts[n->l].x <= stx && enx <= pts[n->r].x && pts[n->l].y <= sty && eny <= pts[n->r].y) {
+    // for (int i = n->l; i <= n->r; i++) {
+      // ans.insert(i);
+    // }
+    // return;
+  // }
+
   if (dep%2 == 0) {
-    query(stx, enx, sty, eny, dep+1, n->ln);
-    query(stx, enx, sty, eny, dep+1, n->rn);
+    if (stx <= x) query(stx, enx, sty, eny, dep+1, n->ln);
+    if (x <= stx) query(stx, enx, sty, eny, dep+1, n->rn);
   } else {
-    query(stx, enx, sty, eny, dep+1, n->ln);
-    query(stx, enx, sty, eny, dep+1, n->rn);
+    if (sty <= y) query(stx, enx, sty, eny, dep+1, n->ln);
+    if (y <= sty) query(stx, enx, sty, eny, dep+1, n->rn);
   }
 }
 
